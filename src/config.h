@@ -23,6 +23,7 @@ typedef struct
     long long numThreads;        // number of threads used by libMR
     bool forceSaveCrossRef;      // Internal debug configuration param
     char *password;              // tls password which used by libmr
+    bool latestEvent;            // enable event on appends to actul bucket
     bool dontAssertOnFailiure;   // Internal debug configuration param
     long long ignoreMaxTimeDiff; // Insert filter max time diff with the last sample
     double ignoreMaxValDiff;     // Insert filter max value diff with the last sample
