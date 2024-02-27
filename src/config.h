@@ -24,6 +24,7 @@ typedef struct
     bool forceSaveCrossRef;    // Internal debug configuration param
     char *password;            // tls password which used by libmr
     bool dontAssertOnFailiure; // Internal debug configuration param
+    bool latestEvent;       // enable event on appends to actul bucket
 } TSConfig;
 
 extern TSConfig TSGlobalConfig;
