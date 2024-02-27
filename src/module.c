@@ -489,6 +489,10 @@ static void handleCompaction(RedisModuleCtx *ctx,
         RedisModule_CloseKey(key);
     }
     rule->aggClass->appendValue(rule->aggContext, value, timestamp);
+    if(TSGlobalConfig.latestEvent) {
+        RedisModule_NotifyKeyspaceEvent(
+            ctx, REDISMODULE_NOTIFY_MODULE,"ts.add:dest:latest", rule->destKey);
+    }
 }
 
 static int internalAdd(RedisModuleCtx *ctx,
