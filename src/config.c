@@ -179,6 +179,22 @@ int ReadConfig(RedisModuleCtx *ctx, RedisModuleString **argv, int argc) {
             TSGlobalConfig.forceSaveCrossRef = false;
         }
     }
+    TSGlobalConfig.latestEvent = false;
+    if (argc > 1 && RMUtil_ArgIndex("LATEST_EVENT", argv, argc) >= 0) {
+        RedisModuleString *latestEvent;
+        if (RMUtil_ParseArgsAfter("LATEST_EVENT", argv, argc, "s", &latestEvent) !=
+            REDISMODULE_OK) {
+            RedisModule_Log(ctx, "warning", "Unable to parse argument after LATEST_EVENT");
+            return TSDB_ERROR;
+        }
+        size_t latestEvent_len;
+        const char *latestEvent_cstr = RedisModule_StringPtrLen(latestEvent, &latestEvent_len);
+        if (!strcasecmp(latestEvent_cstr, "enable")) {
+            TSGlobalConfig.latestEvent = true;
+        } else if (!strcasecmp(latestEvent_cstr, "disable")) {
+            TSGlobalConfig.latestEvent = false;
+        }
+    }
     TSGlobalConfig.dontAssertOnFailiure = false;
     if (argc > 1 && RMUtil_ArgIndex("DONT_ASSERT_ON_FAILIURE", argv, argc) >= 0) {
         RedisModuleString *dontAssertOnFailiure;
@@ -200,23 +216,6 @@ int ReadConfig(RedisModuleCtx *ctx, RedisModuleString **argv, int argc) {
 
         extern bool _dontAssertOnFailiure;
         _dontAssertOnFailiure = TSGlobalConfig.dontAssertOnFailiure;
-    }
-    TSGlobalConfig.latestEvent = false;
-    if (argc > 1 && RMUtil_ArgIndex("LATEST_EVENT", argv, argc) >= 0) {
-        RedisModuleString *latestEvent;
-        if (RMUtil_ParseArgsAfter("LATEST_EVENT", argv, argc, "s", &latestEvent) !=
-            REDISMODULE_OK) {
-            RedisModule_Log(ctx, "warning", "Unable to parse argument after LATEST_EVENT");
-            return TSDB_ERROR;
-        }
-        size_t latestEvent_len;
-        const char *latestEvent_cstr =
-            RedisModule_StringPtrLen(latestEvent, &latestEvent_len);
-        if (!strcasecmp(latestEvent_cstr, "enable")) {
-            TSGlobalConfig.latestEvent = true;
-        } else if (!strcasecmp(latestEvent_cstr, "disable")) {
-            TSGlobalConfig.latestEvent = false;
-        }
     }
     RedisModule_Log(ctx,
                     "notice",
