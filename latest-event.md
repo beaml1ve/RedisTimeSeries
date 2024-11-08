@@ -7,14 +7,17 @@ Named it as latest-event, and added a binary value argument to the runtime argum
 
 The original RedisTimeSeries library forked to beaml1ve as a public fork.
 The feature/beam-latest-event branch is opened - containing one commit with the modifications.
-The modification in the config.gh and config.c sources are to manage the argument, and the module.c contains the inserted ement emitting function.
+The modification in the config.h and config.c sources are to manage the argument, and the module.c contains the inserted event emitting function.
 
 To deploy a new release:
 
 1. SYNC the fork
-2. Select the commit would like to deploy - form example the v1.2.3 in the original repository (redis/RedisTimeSeries). Find the same commit in the forked repo, it will have different commit hash - for example "123456...".
-3. Open a branch for the new release from the commit, name it as 1.2.3
-4. Cherry pick the commit from the feature/beam-latest-event containing the modifications. It might conflict in the config.h or config.h - if the argumenbts of the original repo also extended, or in the module.c if the logic of the modle has been changed. The config conflicts can be resolved simply by merging the current and the incomming commit, that is simple. If module.c conflicting need to check what happened and change the code.
-5. If there are bit modifications, than apply the modifications to the feature=RedisTimeSeries repo, and merge (rebase) the commints together to form a single commit for all modifications that can be used in the future.
+2. Select the commit would like to deploy - form example the v1.2.3 in the original repository (redis/RedisTimeSeries). Find the same commit in the forked repo, it will have different commit hash in the fork.
+3. Open a new branch in the fork from the selected commit for the new release, name it as 1.2.3 (semver).
+4. Cherry pick the commit from the feature/beam-latest-event containing the modifications. It might conflict in the config.h or config.h - if the arguments of the original library extended, or in the module.c if the logic of the library module has been changed. The config conflicts can be resolved simply by merging the current and the incomming commit, that is simple. If module.c conflicting need to check what happened and change the code according.
+5. If the patch is modified, than apply the modifications to the feature/RedisTimeSeries repo, and merge (rebase) the commits together to form a single commit for all modifications that can be used (in cherry-pick) in the future releases.
 
-The ecosystem rpositora redis-stack branch is building the source and packing it to the container used by the deploiyments.
+The ecosystem rpository contains a redis-stack branch. This branch is building the redis-stack container using the modified (forked) sources.
+
+TODO: revise the built-in github actions, tests, etc
+TODO: apply own CI/CD tasks is required.
